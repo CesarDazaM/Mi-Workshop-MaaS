@@ -34,48 +34,130 @@ st.set_page_config(
 # ============================================================================
 CUSTOM_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --bg-primary:   #0a0a0a;
-    --bg-secondary: #141414;
-    --bg-tertiary:  #1c1c1c;
-    --bg-elevated:  #232323;
-    --border-subtle:#27272a;
-    --border-default:#3f3f46;
-    --text-primary: #fafafa;
-    --text-secondary:#a1a1aa;
-    --text-muted:   #71717a;
-    --accent:       #3b82f6;
-    --accent-hover: #2563eb;
-    --accent-soft:  rgba(59,130,246,0.12);
-    --success:      #22c55e;
-    --warning:      #f59e0b;
-    --danger:       #ef4444;
-    --radius:       10px;
+    /* --- Base Dark / Deep Space --- */
+    --bg-primary:   #0B0F19;
+    --bg-secondary: #111827;
+    --bg-tertiary:  #0d1117;
+    --bg-elevated:  #1a2234;
+    --border-subtle:rgba(255,255,255,0.06);
+    --border-default:rgba(255,255,255,0.12);
+    --text-primary: #f0f4ff;
+    --text-secondary:#a1a1b5;
+    --text-muted:   #6b7280;
+    --radius:       12px;
+    /* --- Vibrant Accents --- */
+    --cyan:         #00F0FF;
+    --violet:       #8B5CF6;
+    --violet-light: #A855F7;
+    --emerald:      #10B981;
+    --amber:        #F59E0B;
+    --coral:        #FF4D4D;
+    --indigo:       #6366F1;
+    /* --- Soft variants for backgrounds --- */
+    --cyan-soft:    rgba(0,240,255,0.10);
+    --violet-soft:  rgba(139,92,246,0.12);
+    --emerald-soft: rgba(16,185,129,0.12);
+    --amber-soft:   rgba(245,158,11,0.12);
+    --coral-soft:   rgba(255,77,77,0.12);
+    /* --- Transitions --- */
+    --ease: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Animaciones Keyframe --- */
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.7); }
+}
+@keyframes shimmer {
+    0%   { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+@keyframes gradient-pulse {
+    0%, 100% { box-shadow: 0 0 5px rgba(0,240,255,0.3), 0 0 10px rgba(139,92,246,0.2); }
+    50%      { box-shadow: 0 0 20px rgba(0,240,255,0.5), 0 0 40px rgba(139,92,246,0.35); }
+}
+@keyframes border-glow {
+    0%, 100% { border-color: rgba(0,240,255,0.25); }
+    50%      { border-color: rgba(139,92,246,0.45); }
+}
+@keyframes float-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin-glow {
+    0%   { transform: rotate(0deg); box-shadow: 0 0 10px rgba(0,240,255,0.4); }
+    50%  { box-shadow: 0 0 20px rgba(139,92,246,0.6); }
+    100% { transform: rotate(360deg); box-shadow: 0 0 10px rgba(0,240,255,0.4); }
 }
 
 /* --- Base --- */
 html, body, .stApp {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: var(--bg-primary);
+    background: var(--bg-primary);
     color: var(--text-primary);
 }
-.stApp { padding-top: 2.5rem; }
+.stApp {
+    padding-top: 2.5rem;
+    background: radial-gradient(ellipse at top, rgba(139,92,246,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at bottom right, rgba(0,240,255,0.04) 0%, transparent 50%),
+                var(--bg-primary);
+}
 
-/* --- Sidebar --- */
+/* --- Sidebar (ancho fijo, estático) --- */
 section[data-testid="stSidebar"] {
-    background-color: var(--bg-secondary);
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
     border-right: 1px solid var(--border-subtle);
+    box-shadow: 2px 0 30px rgba(0,0,0,0.4);
+    width: 300px !important;
+    min-width: 300px !important;
+    max-width: 300px !important;
+}
+/* Evitar que el contenido del sidebar se desplace o desaparezca */
+section[data-testid="stSidebar"] > div {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    max-width: 100% !important;
 }
 section[data-testid="stSidebar"] * {
     font-family: 'Inter', sans-serif !important;
 }
 
+/* --- Sidebar Title: blanco por defecto, azul glow en hover --- */
+.sidebar-title {
+    color: #ffffff !important;
+    font-size: 1.5rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    display: block;
+    padding: 0.25rem 0;
+}
+.sidebar-title:hover {
+    color: #00F0FF !important;
+    text-shadow: 0 0 8px rgba(0,240,255,0.7),
+                 0 0 18px rgba(0,240,255,0.5),
+                 0 0 36px rgba(0,240,255,0.3),
+                 0 0 60px rgba(99,102,241,0.2);
+    transform: scale(1.03);
+}
+/* Subtítulo blanco */
+.sidebar-subtitle {
+    color: #ffffff !important;
+    font-size: 0.85rem !important;
+    font-weight: 400 !important;
+    margin-top: -0.5rem;
+    opacity: 0.7;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* --- Tipografía --- */
 h1, h2, h3, h4 {
     color: var(--text-primary) !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
     letter-spacing: -0.02em;
 }
 h1 { font-size: 1.85rem !important; }
@@ -84,20 +166,36 @@ h3 { font-size: 1.15rem !important; }
 h4 { font-size: 1rem    !important; }
 p, li, span { color: var(--text-secondary); }
 
-/* --- Inputs --- */
+/* --- Inputs (texto negro para legibilidad sobre fondo claro) --- */
 .stTextInput > div > div > input,
 .stTextArea > div > div > textarea,
 .stSelectbox > div > div > div {
-    background-color: var(--bg-tertiary) !important;
-    border: 1px solid var(--border-subtle) !important;
-    border-radius: 8px !important;
-    color: var(--text-primary) !important;
+    background-color: rgba(255,255,255,0.85) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 10px !important;
+    color: #111111 !important;
     font-family: 'Inter', sans-serif !important;
+    transition: var(--ease) !important;
+}
+/* Placeholder en gris claro */
+.stTextInput input::placeholder,
+.stTextArea textarea::placeholder {
+    color: #888888 !important;
+}
+/* Selectbox: valor seleccionado en negro */
+.stSelectbox [data-baseweb="select"] > div > div,
+.stSelectbox [data-baseweb="select"] span {
+    color: #111111 !important;
 }
 .stTextInput > div > div > input:focus,
 .stTextArea > div > div > textarea:focus {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px var(--accent-soft) !important;
+    border-color: var(--cyan) !important;
+    box-shadow: 0 0 0 3px var(--cyan-soft), 0 0 15px rgba(0,240,255,0.15) !important;
+    background-color: rgba(255,255,255,0.95) !important;
+}
+.stSelectbox > div > div > div:hover {
+    border-color: var(--violet) !important;
+    box-shadow: 0 0 12px rgba(139,92,246,0.2) !important;
 }
 
 /* --- Labels --- */
@@ -107,44 +205,114 @@ p, li, span { color: var(--text-secondary); }
     font-size: 0.875rem !important;
 }
 
-/* --- Radio --- */
-.stRadio > div { gap: 0.75rem; }
+/* --- Radio: glow diferenciado seleccionado vs no-seleccionado --- */
+.stRadio > div {
+    gap: 0.6rem !important;
+    flex-direction: column !important;
+}
+/* Base: todos los labels */
+.stRadio > div > label {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-radius: 10px !important;
+    padding: 0.6rem 0.85rem !important;
+    border: 1px solid transparent !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+/* Seleccionado: glow TENUE (ya estoy aquí) */
 .stRadio > div > label[data-checked="true"] {
-    background-color: var(--accent-soft) !important;
-    border-color: var(--accent) !important;
-    color: var(--accent) !important;
+    background: rgba(139,92,246,0.06) !important;
+    border-color: rgba(139,92,246,0.15) !important;
+    color: var(--violet-light) !important;
+    box-shadow: 0 0 5px rgba(139,92,246,0.10) !important;
+}
+/* Seleccionado + hover: un poco más, pero sigue siendo tenue */
+.stRadio > div > label[data-checked="true"]:hover {
+    background: rgba(139,92,246,0.08) !important;
+    border-color: rgba(139,92,246,0.25) !important;
+    box-shadow: 0 0 8px rgba(139,92,246,0.15) !important;
+}
+/* No seleccionado + hover: glow FUERTE (¡click aquí para ir al otro panel!) */
+.stRadio > div > label:not([data-checked="true"]):hover {
+    background: rgba(0,240,255,0.08) !important;
+    border-color: rgba(0,240,255,0.40) !important;
+    color: var(--cyan) !important;
+    box-shadow: 0 0 18px rgba(0,240,255,0.30),
+                 0 0 36px rgba(0,240,255,0.15) !important;
+    transform: translateX(4px) !important;
 }
 
-/* --- Botones --- */
-.stButton > button {
-    background-color: var(--accent) !important;
-    color: #fff !important;
+/* --- Botones Primarios (Gradiente + Glow + texto blanco) --- */
+.stButton > button[kind="primary"],
+.stButton > button:not([kind]) {
+    background: linear-gradient(135deg, var(--indigo) 0%, var(--violet-light) 100%) !important;
+    color: #ffffff !important;
     border: none !important;
-    border-radius: 8px !important;
-    font-weight: 500 !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
     font-family: 'Inter', sans-serif !important;
-    padding: 0.5rem 1.5rem !important;
-    transition: all 0.2s ease !important;
+    padding: 0.55rem 1.5rem !important;
+    transition: var(--ease) !important;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.25) !important;
 }
-.stButton > button:hover {
-    background-color: var(--accent-hover) !important;
-    box-shadow: 0 4px 14px rgba(59,130,246,0.35);
+/* Forzar texto blanco en todos los hijos del boton primario */
+.stButton > button[kind="primary"] *,
+.stButton > button:not([kind]) * {
+    color: #ffffff !important;
 }
+.stButton > button[kind="primary"]:hover,
+.stButton > button:not([kind]):hover {
+    background: linear-gradient(135deg, var(--violet) 0%, var(--violet-light) 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(139,92,246,0.45), 0 4px 16px rgba(168,85,247,0.3) !important;
+    transform: translateY(-2px) !important;
+}
+.stButton > button[kind="primary"]:active,
+.stButton > button:not([kind]):active {
+    transform: scale(0.97) !important;
+    box-shadow: 0 0 10px rgba(139,92,246,0.3) !important;
+    background: #555555 !important;
+}
+
+/* --- Botones Secundarios (Glassmorphism + hover dramatico) --- */
 .stButton > button[kind="secondary"] {
-    background-color: var(--bg-elevated) !important;
+    background: rgba(255,255,255,0.04) !important;
+    backdrop-filter: blur(8px) !important;
     color: var(--text-primary) !important;
     border: 1px solid var(--border-default) !important;
+    border-radius: 10px !important;
+    font-weight: 500 !important;
+    font-family: 'Inter', sans-serif !important;
+    transition: var(--ease) !important;
 }
+/* Hover: iluminacion + cambio de color (cyan -> violet glow) */
 .stButton > button[kind="secondary"]:hover {
-    border-color: var(--accent) !important;
+    border-color: var(--cyan) !important;
+    background: linear-gradient(135deg, rgba(0,240,255,0.12) 0%, rgba(139,92,246,0.12) 100%) !important;
+    color: var(--cyan) !important;
+    box-shadow: 0 0 22px rgba(0,240,255,0.35), 0 0 40px rgba(139,92,246,0.20) !important;
+    transform: translateY(-2px) !important;
+    font-weight: 600 !important;
+}
+.stButton > button[kind="secondary"]:active {
+    transform: scale(0.97) !important;
+    background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(0,240,255,0.15) 100%) !important;
 }
 
-/* --- Métricas --- */
+/* --- Métricas (Glassmorphism cards) --- */
 div[data-testid="stMetric"] {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius);
-    padding: 1rem 1.25rem;
+    background: rgba(255,255,255,0.03) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius) !important;
+    padding: 1rem 1.25rem !important;
+    transition: var(--ease) !important;
+}
+div[data-testid="stMetric"]:hover {
+    border-color: rgba(0,240,255,0.25) !important;
+    box-shadow: 0 0 18px rgba(0,240,255,0.12) !important;
+    transform: translateY(-1px) !important;
 }
 div[data-testid="stMetric"] label {
     color: var(--text-muted) !important;
@@ -154,7 +322,7 @@ div[data-testid="stMetric"] label {
 }
 div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
     color: var(--text-primary) !important;
-    font-weight: 700 !important;
+    font-weight: 800 !important;
     font-size: 1.6rem !important;
 }
 
@@ -163,18 +331,31 @@ hr, div[data-testid="stDivider"] {
     border-color: var(--border-subtle) !important;
 }
 
-/* --- Contenedores con borde (cards) --- */
+/* --- Contenedores con borde (cards — Glassmorphism + Glow hover) --- */
 div[data-testid="stVerticalBlockBorderWrapper"] {
     border-radius: var(--radius) !important;
-    border-color: var(--border-subtle) !important;
-    background-color: var(--bg-secondary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    background: rgba(255,255,255,0.03) !important;
+    backdrop-filter: blur(12px) !important;
+    transition: var(--ease) !important;
+    animation: float-in 0.35s ease-out !important;
+}
+div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+    border-color: rgba(139,92,246,0.30) !important;
+    box-shadow: 0 0 20px rgba(139,92,246,0.10), 0 4px 24px rgba(0,0,0,0.2) !important;
 }
 
 /* --- Expanders --- */
 details[data-testid="stExpander"] {
     border: 1px solid var(--border-subtle) !important;
-    border-radius: 8px !important;
-    background-color: var(--bg-tertiary) !important;
+    border-radius: 10px !important;
+    background: rgba(255,255,255,0.02) !important;
+    backdrop-filter: blur(8px) !important;
+    transition: var(--ease) !important;
+}
+details[data-testid="stExpander"]:hover {
+    border-color: rgba(0,240,255,0.20) !important;
+    box-shadow: 0 0 14px rgba(0,240,255,0.08) !important;
 }
 details[data-testid="stExpander"] summary {
     color: var(--text-primary) !important;
@@ -191,11 +372,13 @@ details[data-testid="stExpander"] summary {
 ::-webkit-scrollbar       { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-secondary); }
 ::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+::-webkit-scrollbar-thumb:hover { background: var(--violet); }
 
-/* --- Badges personalizados --- */
+/* --- Badges con glow --- */
 .badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     padding: 0.2rem 0.65rem;
     border-radius: 6px;
     font-size: 0.72rem;
@@ -203,13 +386,65 @@ details[data-testid="stExpander"] summary {
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-family: 'Inter', sans-serif;
+    transition: var(--ease);
 }
-.badge-alta     { background: rgba(239,68,68,0.15);  color: #ef4444; }
-.badge-media    { background: rgba(245,158,11,0.15); color: #f59e0b; }
-.badge-baja     { background: rgba(34,197,94,0.15);  color: #22c55e; }
-.badge-abierto  { background: rgba(59,130,246,0.15); color: #3b82f6; }
-.badge-progreso { background: rgba(245,158,11,0.15); color: #f59e0b; }
-.badge-resuelto { background: rgba(34,197,94,0.15);  color: #22c55e; }
+.badge-alta     { background: rgba(255,77,77,0.12);  color: var(--coral);   border: 1px solid rgba(255,77,77,0.20); }
+.badge-media    { background: rgba(245,158,11,0.12); color: var(--amber);   border: 1px solid rgba(245,158,11,0.20); }
+.badge-baja     { background: rgba(16,185,129,0.12); color: var(--emerald); border: 1px solid rgba(16,185,129,0.20); }
+.badge-abierto  { background: rgba(0,240,255,0.10);  color: var(--cyan);    border: 1px solid rgba(0,240,255,0.20); }
+.badge-progreso { background: rgba(245,158,11,0.12); color: var(--amber);   border: 1px solid rgba(245,158,11,0.20); }
+.badge-resuelto { background: rgba(16,185,129,0.12); color: var(--emerald); border: 1px solid rgba(16,185,129,0.20); }
+
+/* --- Pulsing dot indicator --- */
+.dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    animation: pulse-dot 1.8s ease-in-out infinite;
+}
+.dot-abierto  { background: var(--cyan);    box-shadow: 0 0 6px var(--cyan); }
+.dot-progreso { background: var(--amber);   box-shadow: 0 0 6px var(--amber); }
+.dot-resuelto { background: var(--emerald); box-shadow: 0 0 6px var(--emerald); }
+
+/* --- AI Loading: shimmer skeleton --- */
+.ai-shimmer {
+    background: linear-gradient(90deg,
+        rgba(255,255,255,0.02) 0%,
+        rgba(139,92,246,0.08) 50%,
+        rgba(255,255,255,0.02) 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(139,92,246,0.15);
+}
+.ai-loading-box {
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 1.5rem;
+    animation: border-glow 2s ease-in-out infinite;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(8px);
+}
+.ai-loading-text {
+    color: var(--violet-light);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+/* --- Spinner con glow --- */
+.glow-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid transparent;
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: spin-glow 1s linear infinite;
+}
 
 /* --- Utilidad: texto centrado --- */
 .center-muted {
@@ -217,6 +452,12 @@ details[data-testid="stExpander"] summary {
     color: var(--text-muted);
     padding: 3rem 0;
     font-size: 0.95rem;
+}
+
+/* --- Toast enhancement --- */
+.stToast {
+    border-radius: 10px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
 }
 </style>
 """
@@ -519,13 +760,21 @@ def badge_prioridad(prioridad: str) -> str:
 
 
 def badge_estado(estado: str) -> str:
-    """Genera el HTML de un badge coloreado para el estado."""
-    cls = {
+    """Genera el HTML de un badge coloreado con dot pulsante para el estado."""
+    badge_cls = {
         "Abierto":     "badge-abierto",
         "En Progreso": "badge-progreso",
         "Resuelto":    "badge-resuelto",
     }.get(estado, "badge-abierto")
-    return f'<span class="badge {cls}">{estado}</span>'
+    dot_cls = {
+        "Abierto":     "dot-abierto",
+        "En Progreso": "dot-progreso",
+        "Resuelto":    "dot-resuelto",
+    }.get(estado, "dot-abierto")
+    return (
+        f'<span class="badge {badge_cls}">'
+        f'<span class="dot {dot_cls}"></span>{estado}</span>'
+    )
 
 
 # ============================================================================
@@ -533,6 +782,11 @@ def badge_estado(estado: str) -> str:
 # ============================================================================
 def panel_usuario() -> None:
     """Formulario estilizado para que el usuario reporte un problema."""
+
+    # Limpiar formulario antes de instanciar los widgets (flag activada tras crear ticket)
+    if st.session_state.pop("form_clear", False):
+        st.session_state["form_titulo"] = ""
+        st.session_state["form_descripcion"] = ""
 
     st.markdown("## 📝 Reportar Problema")
     st.markdown(
@@ -550,6 +804,7 @@ def panel_usuario() -> None:
             titulo = st.text_input(
                 "Título del problema",
                 placeholder="Ej: Error 500 al acceder al dashboard",
+                key="form_titulo",
             )
             categoria = st.selectbox(
                 "Categoría",
@@ -571,6 +826,7 @@ def panel_usuario() -> None:
                 "pasos para reproducirlo, mensajes de error, contexto..."
             ),
             height=160,
+            key="form_descripcion",
         )
 
         st.markdown("")
@@ -585,6 +841,9 @@ def panel_usuario() -> None:
                     titulo.strip(), categoria, prioridad, descripcion.strip()
                 )
                 st.toast(f"Ticket #{ticket_id} creado correctamente", icon="✅")
+                # Activar flag para limpiar en el próximo rerun (antes de los widgets)
+                st.session_state["form_clear"] = True
+                st.rerun()
 
     st.markdown("")
     st.markdown("---")
@@ -653,8 +912,53 @@ def panel_admin() -> None:
     st.markdown(f"### 📋 Tickets ({len(tickets)})")
     st.markdown("")
 
-    for ticket in tickets:
+    # --- Controles de paginación ---
+    col_page_sz, col_spacer = st.columns([1, 3])
+    with col_page_sz:
+        tickets_por_pagina = st.selectbox(
+            "Tickets por página",
+            [5, 10, 20],
+            index=1,
+            key="page_size",
+        )
+
+    total_tickets = len(tickets)
+    total_paginas = max(1, (total_tickets + tickets_por_pagina - 1) // tickets_por_pagina)
+    pagina_actual = st.session_state.get("admin_pagina", 1)
+    if pagina_actual > total_paginas:
+        pagina_actual = 1
+        st.session_state["admin_pagina"] = 1
+
+    inicio = (pagina_actual - 1) * tickets_por_pagina
+    fin = inicio + tickets_por_pagina
+    tickets_pagina = tickets[inicio:fin]
+
+    st.markdown("")
+
+    for ticket in tickets_pagina:
         _render_ticket_card(ticket)
+
+    # --- Navegación de páginas ---
+    if total_paginas > 1:
+        st.markdown("")
+        col_prev, col_info, col_next = st.columns([1, 2, 1])
+        with col_prev:
+            if st.button("⬅️ Anterior", disabled=(pagina_actual <= 1),
+                         key="btn_prev", use_container_width=True):
+                st.session_state["admin_pagina"] = pagina_actual - 1
+                st.rerun()
+        with col_info:
+            st.markdown(
+                f"<p style='text-align: center; color: var(--text-muted); "
+                f"padding-top: 0.5rem;'>Página <strong>{pagina_actual}</strong> "
+                f"de <strong>{total_paginas}</strong></p>",
+                unsafe_allow_html=True,
+            )
+        with col_next:
+            if st.button("Siguiente ➡️", disabled=(pagina_actual >= total_paginas),
+                         key="btn_next", use_container_width=True):
+                st.session_state["admin_pagina"] = pagina_actual + 1
+                st.rerun()
 
 
 def _render_ticket_card(ticket: dict) -> None:
@@ -714,6 +1018,7 @@ def _render_ticket_card(ticket: dict) -> None:
             if st.button(
                 "🤖 Solución Parcial (IA)",
                 key=f"ia_{ticket['id']}",
+                type="secondary",
                 use_container_width=True,
             ):
                 respuesta = procesar_ticket_con_ia(
@@ -754,8 +1059,21 @@ def _render_ticket_card(ticket: dict) -> None:
                     use_container_width=True,
                 ):
                     try:
-                        with st.spinner("El agente está analizando el ticket..."):
-                            respuesta_agent = generate_ticket_response(ticket)
+                        # Indicador animado personalizado (glow + shimmer)
+                        loading_ph = st.empty()
+                        loading_ph.markdown(
+                            '<div class="ai-loading-box">'
+                            '<div class="ai-loading-text">🤖 El agente está analizando el ticket...</div>'
+                            '<div class="glow-spinner"></div>'
+                            '<div class="ai-shimmer" style="margin-top: 1rem;">'
+                            '<div style="height: 12px; width: 80%; margin-bottom: 8px; border-radius: 4px; background: rgba(255,255,255,0.06);"></div>'
+                            '<div style="height: 12px; width: 60%; margin-bottom: 8px; border-radius: 4px; background: rgba(255,255,255,0.06);"></div>'
+                            '<div style="height: 12px; width: 70%; border-radius: 4px; background: rgba(255,255,255,0.06);"></div>'
+                            '</div></div>',
+                            unsafe_allow_html=True,
+                        )
+                        respuesta_agent = generate_ticket_response(ticket)
+                        loading_ph.empty()
                         # Guardar la respuesta del agente en BD
                         guardar_respuesta_ia(ticket["id"], respuesta_agent)
                         st.toast("Respuesta del AI Agent generada", icon="🤖")
@@ -794,10 +1112,12 @@ def main() -> None:
 
     # --- Barra lateral de navegación ---
     with st.sidebar:
-        st.markdown("# 🤖 Soporte Técnico · AI Agent")
         st.markdown(
-            '<p style="color: var(--text-muted); font-size: 0.85rem; margin-top: -0.5rem;">'
-            'Sistema de gestión de tickets con IA</p>',
+            '<h1 class="sidebar-title">🤖 Soporte · AI Agent</h1>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            '<p class="sidebar-subtitle">Sistema de gestión de tickets con IA</p>',
             unsafe_allow_html=True,
         )
         st.markdown("---")
@@ -817,15 +1137,15 @@ def main() -> None:
         if _is_agent_configured():
             config = _get_env_config()
             st.markdown(
-                '<p style="color: var(--success); font-size: 0.8rem;">'
-                '✅ AI Agent configurado</p>',
+                '<p style="color: var(--emerald); font-size: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">'
+                '<span class="dot dot-resuelto"></span> AI Agent configurado</p>',
                 unsafe_allow_html=True,
             )
             st.caption(f"Modelo: `{config['model']}`")
         else:
             st.markdown(
-                '<p style="color: var(--warning); font-size: 0.8rem;">'
-                '⚠️ AI Agent no configurado</p>',
+                '<p style="color: var(--amber); font-size: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">'
+                '<span class="dot dot-progreso"></span> AI Agent no configurado</p>',
                 unsafe_allow_html=True,
             )
 
